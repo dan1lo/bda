@@ -1,0 +1,68 @@
+create table funcionario (
+	cod_funcionario serial,
+	nome_funcionario text,
+	salario float,
+	departamento text,
+	primary key(cod_funcionario)
+	
+
+);
+
+
+insert into funcionario(nome_funcionario, salario, departamento) VALUES ('roger', 10, 'ti'), ('felipe', 12, 'ti'), ('joao', 15, 'rh'), ('raquel', 30, 'adm'), ('danilo', 122, 'edu');
+
+
+create table cidade (
+	cod_cidade serial,
+	nome_cidade text,
+	uf char(2),
+	taxa float,
+	primary key (cod_cidade)
+
+);
+
+
+
+
+
+
+insert into cidade (nome_cidade, uf, taxa) VALUES ('Recife', 'pe', 30), ('Garanhuns', 'pe', 50), ('Maceio', 'al', 100); 
+
+create table cliente(
+	cod_cliente serial,
+	nome_cliente text,
+	email text,
+	renda float,
+	primary key (cod_cliente)
+
+);
+INSERT INTO cliente ( nome_cliente, email, renda) values( 'digo', 'email', 10), ('brocador', 'email', 12), ('bala', 'email', 15), ('danilo', 'email', 100);
+
+
+
+create table frete (
+	cod_frete serial,
+	data date,
+	cod_cliente int references cliente(cod_cliente),
+	cod_cidade int references cidade(cod_cidade),
+	cod_funcionario int references funcionario(cod_funcionario),
+	peso float,
+	valor_frete float
+	
+);
+
+insert into frete(cod_cliente, cod_cidade, cod_funcionario, peso, valor_frete) VALUES (1,1,1,30,200), (1,1,1,20,90), (2,2,3,20, 50), (4,1,2,10,30), (4, 1, 2,20,50);
+
+
+
+select nome_funcionario from funcionario where cod_funcionario = (select cod_funcionario from frete where valor_frete = (select max(valor_frete) from frete));
+
+select nome_cidade from cidade where cod_cidade in (select cod_cidade from frete);
+
+ou funciona mas volta recife mais de uma vez  
+select c.nome_cidade from cidade as c inner join frete as f on (c.cod_cidade=f.cod_cidade)
+
+
+select count(cod_frete) from frete where valor_frete>80; 
+
+select avg(peso) from frete where cod_cliente = (select cod_cliente from cliente where nome_cliente like 'danilo');
