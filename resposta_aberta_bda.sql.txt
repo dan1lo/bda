@@ -53,16 +53,26 @@ create table frete (
 
 insert into frete(cod_cliente, cod_cidade, cod_funcionario, peso, valor_frete) VALUES (1,1,1,30,200), (1,1,1,20,90), (2,2,3,20, 50), (4,1,2,10,30), (4, 1, 2,20,50);
 
-
+/* 7 A  */
 
 select nome_funcionario from funcionario where cod_funcionario = (select cod_funcionario from frete where valor_frete = (select max(valor_frete) from frete));
 
+
+
+/*  7 B */
 select nome_cidade from cidade where cod_cidade in (select cod_cidade from frete);
 
-ou funciona mas volta recife mais de uma vez  
+/*  ou funciona mas volta recife mais de uma vez   (para ficar melhor vc pode usar distinct)
+*/
 select c.nome_cidade from cidade as c inner join frete as f on (c.cod_cidade=f.cod_cidade)
 
 
+
+
+/* 8 A */
 select count(cod_frete) from frete where valor_frete>80; 
 
+
+
+/* 8 B */
 select avg(peso) from frete where cod_cliente = (select cod_cliente from cliente where nome_cliente like 'danilo');
