@@ -12,5 +12,6 @@ raise notice 'o valor da variável é %', num;
 num:= num+1;
 return num;
 end; $$
-langauge plpgsql;
+language plpgsql;
 
+--para executar select mostra_valor(40)

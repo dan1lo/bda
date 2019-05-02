@@ -1,5 +1,5 @@
 --aqui eu crio, se já existir, eu sobrescrevo a funcao
-CREATE OR REPLACE FUNCTION mostra_valor(valor int) returns integer as 
+CREATE OR REPLACE FUNCTION mostra_valor() returns integer as 
 -- funcao mostra_valor receber um inteiro como parametro e retorna um inteiro
 $$ declare
 --neste espaco eu crio as variáveis 
@@ -9,8 +9,8 @@ num ALIAS for $1;
 
 begin 
 raise notice 'o valor da variável é %', num;
-num:= num+1;
-return num;
+
+return num+1;
 end; $$
 langauge plpgsql;
 
