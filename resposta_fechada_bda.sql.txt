@@ -1,0 +1,45 @@
+create table tt1(
+	a int,
+	b int
+	
+);
+
+insert into tt1(a,b) values (1,2),(2,3),(3,4),(2,3),(4,3),(2,3);
+
+
+    update tt1 set b = b *2
+    where tt1.a in (select count (distinct b) FROM tt1)
+
+
+
+
+create table tt3(
+	a int,
+	b int
+	
+);
+insert into tt3(a,b) values (1,2),(3,4),(2,3),(4,3);
+insert into tt3(a) values (3);
+
+SELECT count(B) FROM TT;
+
+
+create table tt4(
+	a int,
+	b int
+	
+);
+
+insert into tt4(a,b) values(1,2),(2,3),(3,4), (4,3);
+insert into tt4(a) values(3);
+
+
+1)a
+2)a
+3)X
+4)3
+5)X 
+6)e
+7)c
+8)e
+
