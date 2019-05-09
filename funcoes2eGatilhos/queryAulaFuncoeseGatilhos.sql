@@ -75,7 +75,7 @@ $$ language plpgsql;
 
 -- exemplo for 
 
-CREATE OR REPLACE FUNCTION func_for returns void as
+CREATE OR REPLACE FUNCTION func_for() returns void as
 $$
 	declare 
 		i integer;
