@@ -26,7 +26,7 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION inserirValor (text, integer) RETURNS text as 
 $$
 	declare
-		valor_idade integer:=2;
+		valor_idade integer:=$2;
 		begin	
 			if valor_idade>=18 THEN
 				INSERT INTO PESSOAS(NOME,IDADE)VALUES($1,$2);
@@ -96,21 +96,49 @@ DROP FUNCTION nome_da_funcao(INTEGER);
 
 -------------------------------GATILHO -----------------
 --primeiro criamos a funcao
+
+CREATE OR REPLACE FUNCTION pessoas_inserir_audt()
+RETURNS trigger AS $$
+	BEGIN
+		INSERT INTO pessoa_log(data_insercao, id_pessoa_log) VALUES (now(), new.id);
+		RETURN new;
+	END;
+$$ LANGUAGE plpgsql;
+-- depois criamos o gatilho
+-- note que para cada linha modificada 
+
+CREATE TRIGGER log_inserir_trigger
+AFTER insert ON pessoas
+FOR EACH ROW -- significa para cada linha modificada
+-- para fazer uma vez independente das modificacoes de linhas 
+-- usar for each statement 
+EXECUTE PROCEDURE pessoas_inserir_audt();
+
+
 CREATE OR REPLACE FUNCTION pessoas_delecao_audt()
 RETURNS trigger AS $$
 	BEGIN
-		UPDATE pessoa_log SET data_delecao = now() where id_pessoa_log = old.id;
+		UPDATE pessoa_log SET data_delecao = now(), nome_alterado = old.nome where id_pessoa_log = old.id;
 		RETURN OLD;
 	END;
 $$ LANGUAGE plpgsql;
 -- depois criamos o gatilho
+
 -- note que para cada modificao 
 CREATE TRIGGER log_delecao_trigger
-AFTER INSERT ON pessoas
+AFTER DELETE ON pessoas
 FOR EACH ROW -- significa para cada linha modificada
 -- para fazer uma vez independente das modificacoes de linhas 
 -- usar for each statement 
 EXECUTE PROCEDURE pessoas_delecao_audt();
 
 
-	
+
+CREATE OR REPLACE FUNCTION pessoas_alteracao_audt()
+RETURNS trigger AS $$
+	BEGIN
+		UPDATE pessoa_log SET data_alteracao = now() where nome_alterado = old.nome;
+		RETURN OLD;
+	END;
+$$ LANGUAGE plpgsql;
+
